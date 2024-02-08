@@ -27,6 +27,10 @@ function getStartGame() {
 
         sigils: [],
 
+        collapsium: D(0),
+        colPoints: D(0),
+        colUpg: {},
+
         options: {
             tickRate: 10,
 
@@ -34,6 +38,8 @@ function getStartGame() {
             pixelText: true,
 
             autoSave: true,
+
+            autoConfirm: {}
         },
 
         stats: {
@@ -44,6 +50,7 @@ function getStartGame() {
             chargeClick: 0,
             sigilForged: 0,
         },
+        best: {},
 
         currentTab: "buttons",
     }

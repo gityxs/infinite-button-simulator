@@ -1,4 +1,4 @@
-let VERSION = "1.0";
+let VERSION = "1.1";
 
 let tabContainer, container;
 let allDirty = false;
@@ -15,6 +15,7 @@ function init() {
     updateAutomationStats();
     updateTokenStats();
     updateSigilEffects();
+    updateCollapseStats();
     updateStyles();
     initTabs();
 
@@ -46,12 +47,6 @@ function tick() {
 
     tabs[currentTab]?.onTick?.();
 
-    saveTimer += delta;
-    if (saveTimer >= 10 && game.options.autoSave) {  
-        save();
-        saveTimer = 0;
-    }
-
     if (D.gt(temp.chargeConsumption, 0)) {
         let effDelta = D.div(game.charge, temp.chargeConsumption).min(delta);
         if (D.gt(effDelta, 0)) {
@@ -68,8 +63,20 @@ function tick() {
             }
         }
     }
+    
+    if (D.gt(temp.colPointGain, 0)) game.colTimer += delta / 60;
+    if (game.colTimer >= 1) {
+        game.colTimer -= 1;
+        game.colPoints = D.add(game.colPoints, temp.colPointGain);
+    }
 
     allDirty = false;
+
+    saveTimer += delta;
+    if (saveTimer >= 10 && game.options.autoSave) {  
+        save();
+        saveTimer = 0;
+    }
 
     if (+game.options.tickRate) setTimeout(tick, 1000 / game.options.tickRate);
     else requestAnimationFrame(tick);

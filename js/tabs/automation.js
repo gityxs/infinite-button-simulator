@@ -1,5 +1,6 @@
 tabs.automation = {
     name: "Automation",
+    tier: 1,
     condition: () => game.unlocks["atm1"],
 
     data: null,

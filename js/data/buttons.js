@@ -196,6 +196,13 @@ let unlocks = {
         conDisplay: () => "Skill level ≥" + format(200) + "",
         execute: () => { updateTabVisibility(); },
     },
+    "abs1": {
+        requires: ["col1"],
+        desc: () => "Unlock Abstract",
+        condition: () => D.gte(game.colPoints, 1e5),
+        conDisplay: () => "−" + format(1e5) + " Collapse Pts.",
+        execute: () => { game.colPoints = D.sub(game.colPoints, 1e5); },
+    },
 }
 let visibleUnlocks = [];
 
@@ -320,6 +327,7 @@ function doResetAuto(times) {
     whileloop: while (D.gt(times, 0)) {
         for (let a = (game.automators.reset?.depth ?? 1); a >= 1; a--) {
             let row = game.ladder[a];
+            if (!row) continue;
             let pos = getHighestButton(row.tier, game.ladder[a - 1].amount);
             if (D.lt(pos, 0)) continue;
             let gain = getButtonGain(row.tier, pos).mul(getRowMulti(row.tier));

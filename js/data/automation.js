@@ -82,7 +82,7 @@ let automators = {
                     container.infoBox = info;
 
                     let title = document.createElement("b");
-                    title.textContent = "Maximum button row depth";
+                    title.textContent = "Maximum button column depth";
                     info.append(title);
                     container.titleBox = title;
 
@@ -139,7 +139,7 @@ let automators = {
                     parent.factor = container;
 
                     let title = document.createElement("div");
-                    title.textContent = "Choose the row where the gain is X times current amount:";
+                    title.textContent = "Choose the col. where the gain is X times current amount:";
                     container.append(title);
                     container.nameBox = title;
                         
@@ -164,7 +164,7 @@ let automators = {
                 
                 let depthCost = this.depthCost(maxDepth);
 
-                parent.depth.speed.textContent = format.comma(depth) + " button rows";
+                parent.depth.speed.textContent = format.comma(depth) + " button columns";
                 parent.depth.consumption.textContent = "^" + format.comma(automators.reset.depthTable[depth], 1) + " consumption";
 
                 parent.depth.slider.max = maxDepth + 5;
@@ -271,9 +271,12 @@ function getChargeValue(item) {
     let gain = D.mul(temp.chargerUpgEffects.value, temp.tokenUpgEffects.double.charge)
         .mul(D.mul(temp.chargerUpgEffects.fillBonus, game.charges.length).add(1))
         .mul(D.mul(temp.chargerUpgEffects.upgBonus, temp.totalAutomatorUpgs).add(1))
-        .mul(D.add(temp.runeStats.charge ?? 0, 1));
+        .mul(D.add(temp.runeStats.charge ?? 0, 1))
+        .mul(temp.colUpgEffects[11]);
+
          if (item.type == "big") gain = D.mul(gain, 5);
     else if (item.type == "wide") gain = D.mul(gain, 15);
+
     return gain;
 }
 

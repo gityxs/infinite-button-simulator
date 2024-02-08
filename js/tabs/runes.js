@@ -1,5 +1,6 @@
 tabs.runes = {
     name: "Runes",
+    tier: 1,
     condition: () => game.unlocks["rne1"],
 
     data: null,

@@ -1,5 +1,6 @@
 tabs.milestones = {
     name: "Milestones",
+    tier: 1,
     condition: () => game.unlocks["mle1"],
 
     data: null,

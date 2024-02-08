@@ -1,5 +1,6 @@
 tabs.buttons = {
     name: "Buttons",
+    tier: 1,
     condition: () => game.unlocks["rne1"],
 
     data: null,

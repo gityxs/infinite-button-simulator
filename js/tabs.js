@@ -9,6 +9,7 @@ function initTabs() {
     for (let tab in tabs) {
         let button = document.createElement("button");
         button.textContent = tabs[tab].name;
+        button.classList.add("tier-" + tabs[tab].tier);
         button.onclick = () => loadTab(currentTab == tab ? "" : tab);
         tabButtons[tab] = button;
         tabContainer.append(button);

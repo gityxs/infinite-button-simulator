@@ -31,10 +31,40 @@ function createRow() {
     return row;
 }
 
+function doScrollbarButtonPress(element, target, dir) {
+    element.scrollBy({ [target]: 40 * dir, behavior: "smooth" });
+    let t = performance.now() + 300;
+    function oninterval() {
+        let d = performance.now() - t;
+        t += d;
+        element.scrollBy({ [target]: dir * d / 5 });
+        interval = setTimeout(oninterval, 10);
+    }
+    let interval = setTimeout(oninterval, 300);
+    function end() {
+        clearInterval(interval);
+        document.removeEventListener("pointerup", end);
+    }
+    document.addEventListener("pointerup", end);
+}
+
 function createScrollbar(element) {
     let bar = document.createElement("div");
-    bar.classList.add("scroll-bar");
+    bar.classList.add("scroll-bar", "vertical");
     bar.items = [];
+
+    let backBtn = document.createElement("button");
+    backBtn.classList.add("back");
+    backBtn.onpointerdown = () => doScrollbarButtonPress(element, "top", -1);
+    bar.append(backBtn);
+
+    let forwBtn = document.createElement("button");
+    forwBtn.classList.add("forw");
+    forwBtn.onpointerdown = () => doScrollbarButtonPress(element, "top", 1);
+    bar.append(forwBtn);
+    
+    let thumbZone = document.createElement("div");
+    bar.append(thumbZone);
 
     let thumb = document.createElement("div");
     thumb.classList.add("thumb");
@@ -42,7 +72,7 @@ function createScrollbar(element) {
         let pos = ev.clientY;
         let base = element.scrollTop;
         let size = element.scrollHeight - element.clientHeight;
-        let range = bar.clientHeight - thumb.offsetHeight;
+        let range = thumbZone.clientHeight - thumb.offsetHeight;
 
         function drag(ev) {
             if (!(ev.buttons & 1)) end();
@@ -59,7 +89,7 @@ function createScrollbar(element) {
 
     });
     bar.thumb = thumb;
-    bar.append(thumb);
+    thumbZone.append(thumb);
 
     function update() {
         bar.classList.toggle("disabled", element.scrollHeight <= element.clientHeight);
@@ -82,13 +112,26 @@ function createHorizontalScrollbar(element) {
     bar.classList.add("scroll-bar", "horizontal");
     bar.items = [];
 
+    let backBtn = document.createElement("button");
+    backBtn.classList.add("back");
+    backBtn.onpointerdown = () => doScrollbarButtonPress(element, "left", -1);
+    bar.append(backBtn);
+
+    let forwBtn = document.createElement("button");
+    forwBtn.classList.add("forw");
+    forwBtn.onpointerdown = () => doScrollbarButtonPress(element, "left", 1);
+    bar.append(forwBtn);
+    
+    let thumbZone = document.createElement("div");
+    bar.append(thumbZone);
+
     let thumb = document.createElement("div");
     thumb.classList.add("thumb");
     thumb.addEventListener("pointerdown", (ev) => {
         let pos = ev.clientX;
         let base = element.scrollLeft;
         let size = element.scrollWidth - element.clientWidth;
-        let range = bar.clientWidth - thumb.offsetWidth;
+        let range = thumbZone.clientWidth - thumb.offsetWidth;
 
         function drag(ev) {
             if (!(ev.buttons & 1)) end();
@@ -105,7 +148,7 @@ function createHorizontalScrollbar(element) {
 
     });
     bar.thumb = thumb;
-    bar.append(thumb);
+    thumbZone.append(thumb);
 
     function update() {
         bar.classList.toggle("disabled", element.scrollWidth <= element.clientWidth);
@@ -125,8 +168,21 @@ function createHorizontalScrollbar(element) {
 
 function createWindowScrollbar(element) {
     let bar = document.createElement("div");
-    bar.classList.add("scroll-bar");
+    bar.classList.add("scroll-bar", "vertical");
     bar.items = [];
+
+    let backBtn = document.createElement("button");
+    backBtn.classList.add("back");
+    backBtn.onpointerdown = () => doScrollbarButtonPress(element, "top", -1);
+    bar.append(backBtn);
+
+    let forwBtn = document.createElement("button");
+    forwBtn.classList.add("forw");
+    forwBtn.onpointerdown = () => doScrollbarButtonPress(element, "top", 1);
+    bar.append(forwBtn);
+    
+    let thumbZone = document.createElement("div");
+    bar.append(thumbZone);
 
     let thumb = document.createElement("div");
     thumb.classList.add("thumb");
@@ -134,7 +190,7 @@ function createWindowScrollbar(element) {
         let pos = ev.clientY;
         let base = window.scrollY;
         let size = document.body.scrollHeight - window.innerHeight;
-        let range = bar.clientHeight - thumb.offsetHeight;
+        let range = thumbZone.clientHeight - thumb.offsetHeight;
 
         function drag(ev) {
             if (!(ev.buttons & 1)) end();
@@ -151,7 +207,7 @@ function createWindowScrollbar(element) {
 
     });
     bar.thumb = thumb;
-    bar.append(thumb);
+    thumbZone.append(thumb);
 
     function update() {
         bar.classList.toggle("disabled", document.body.scrollHeight <= window.innerHeight);

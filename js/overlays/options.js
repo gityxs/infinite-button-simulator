@@ -159,12 +159,14 @@ overlays.options = {
                 function close() {
                     list.remove();
                     document.body.removeEventListener("pointerdown", check);
-                    document.body.removeEventListener("wheel", wheel);
+                    document.body.removeEventListener("wheel", wheel, { passive: false });
+                    button.classList.remove("active");
                 }
     
                 button.blur();
                 document.body.addEventListener("pointerdown", check);
                 document.body.addEventListener("wheel", wheel, { passive: false });
+                button.classList.add("active");
             }
             controlbox.append(button);
 
@@ -181,7 +183,30 @@ overlays.options = {
                     "tickRate",
                     { 0: "Auto", 1: "1 TPS", 2: "2 TPS", 5: "5 TPS", 10: "10 TPS", 20: "20 TPS", 30: "30 TPS", 60: "60 TPS", 1e60: "As fast as possible" }
                 ));
+            
+                if (game.unlocks.col1) {
+                    cat = document.createElement("h3");
+                    cat.textContent = "Confirmations";
+                    content.append(cat);
+                
+                    cat = document.createElement("div");
+                    cat.textContent = "Show a confirmation dialog whenever I do the following things:";
+                    cat.style.marginBottom = "4px";
+                    content.append(cat);
+    
+                    let checks = {}
+                    content.append(checks.collapse = overlays.options.make.checkbox(
+                        "",
+                        "Collapse",
+                        false,
+                        () => { 
+                            game.options.autoConfirm.collapse = !checks.collapse.querySelector("input").checked;
+                        },
+                    ));
+                    checks.collapse.querySelector("input").checked = !game.options.autoConfirm.collapse;
+                }
             }
+
         },
         display: {
             title: "Display",
@@ -261,7 +286,7 @@ overlays.options = {
                     "Save Game",
                     () => {
                         save();
-                        showOverlay("popup", "Game Saved", "It is now safe to close this game.", ["Ok"])
+                        showOverlay("popup", "Game Saved", "It is now safe to power off this tab.", ["Ok"])
                     }
                 ));
 
@@ -294,7 +319,7 @@ overlays.options = {
 
                         let wipeOptsLabel = document.createElement("label");
                         wipeOptsLabel.htmlFor = wipeOpts.id;
-                        wipeOptsLabel.textContent = "Also reset options";
+                        wipeOptsLabel.textContent = "Also reset game options";
                         desc.append(wipeOptsLabel);
 
 
@@ -320,7 +345,7 @@ overlays.options = {
 
                 let textBox = document.createElement("div");
                 textBox.style.textAlign = "center";
-                textBox.style.paddingBlock = "8px 4px";
+                textBox.style.paddingBlock = "8px 12px";
                 content.append(textBox);
 
                 function linkify(text, href) {
@@ -343,6 +368,14 @@ overlays.options = {
                     If you're feeling extremely donatey, feel free to send money to<br/>
                     <a href="${getForbiddenString()}" target="_blank">this PayPal account</a> to help me make more ambitious projects.
                 `
+                content.append(overlays.options.make.action(
+                    "",
+                    "Changelog",
+                    "Show Changelog",
+                    () => {
+                        showOverlay("changelog");
+                    }
+                ));
             }
         },
     }

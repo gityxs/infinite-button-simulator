@@ -96,6 +96,11 @@ a:visited {
     transform: translateY(0) rotate(45deg);
 }
 
+#tabs > button.tier-2 {
+    background: linear-gradient(#533, #422);
+    color: #fab;
+}
+
 
 #container {
     background: #222;
@@ -298,6 +303,19 @@ a:visited {
     padding-block-start: 2px;
     margin-inline-start: 10px;
 }
+
+.button-row.collapse-upgrades {
+    width: 575px;
+    flex-flow: row wrap;
+    align-items: start;
+    justify-content: start;
+    align-content: start;
+}
+.button-row.collapse-upgrades .pushy-button {
+    width: 140px;
+    height: 64px;
+}
+
 
 .charger {
     --delta: 0;
@@ -704,7 +722,7 @@ a:visited {
     padding-block: 10vh;
     mask: 
         conic-gradient(#000 25%, #0000 25% 50%, #000 50% 75%, #0000 75%) top left / 2px 2px repeat,
-        linear-gradient(#000, #000) center / 100% 90% no-repeat;
+        linear-gradient(#000, #000) center / 100% calc(100% - 10px) no-repeat;
     overflow: auto;
     scrollbar-width: none;
     display: flex;
@@ -734,6 +752,7 @@ a:visited {
     border: 1px solid #777;
     border-radius: 2px;
     transition: background .1s;
+    padding: 0;
 }
 .overlay > div > .title > .close:active {
     background: linear-gradient(#ccc, #ddd) 0px 3px no-repeat, linear-gradient(#999, #999);
@@ -755,7 +774,7 @@ a:visited {
     box-shadow: inset 0px -1px #999;
     margin-top: -1px;
     width: 100%;
-    padding: 4px 6px 1px 6px;
+    padding: 5px 6px 1px 6px;
     box-sizing: border-box;
     overflow: hidden;
     flex-shrink: 0;
@@ -765,8 +784,9 @@ a:visited {
     background: #444;
     border: 1px solid #999;
     border-bottom: none;
-    padding: 4px 12px;
+    padding: 5px 12px;
     border-radius: 5px 5px 0 0;
+    margin-block: 0 -1px;
 }
 .overlay > div > .tab-list > button:not(.active, :last-child) {
     border-right: none;
@@ -779,8 +799,8 @@ a:visited {
 }
 .overlay > div > .tab-list > button.active {
     background: #222;
-    padding: 6px 12px 5px 12px;
-    margin-block: -2px -1px;
+    padding: 7px 12px 6px 12px;
+    margin-block: -2px;
     transform: translateY(-0.2px);
     font-weight: bold;
 }
@@ -852,7 +872,10 @@ a:visited {
 }
 
 .option-entry > div:first-child {
+    display: flex;
+    flex-flow: column;
     text-align: right;
+    justify-content: safe center;
 }
 
 .option-entry > div:last-child > .pushy-button {
@@ -938,6 +961,10 @@ a:visited {
     transform: translateY(2px) rotate(-45deg);
     transition: none;
 }
+.dropdown-button.active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
 
 .option-entry > div:last-child > .dropdown-button {
     width: 100%;
@@ -948,7 +975,9 @@ a:visited {
     display: grid;
     position: fixed;
     border: 1px solid #999;
+    border-top: none;
     z-index: 101;
+    animation: dropdown-appear 0.1s linear;
 }
 .dropdown-list button {
     border: none;
@@ -978,6 +1007,16 @@ a:visited {
     transform: translateY(0) rotate(-45deg);
     transition: transform .1s, opacity .1s;
 }
+@keyframes dropdown-appear {
+    from {
+        transform: translateY(-100%);
+        clip-path: inset(100% 0 0 0);
+    } to {
+        transform: translateY(0);
+        clip-path: inset(0);
+    }
+}
+
 
 .inline-checkbox {
     appearance: none;
@@ -1059,15 +1098,17 @@ a:visited {
 }
 
 .scroll-bar {
-    display: block;
+    display: grid;
     position: relative;
     height: 100%;
     width: 18px;
     border-right: 1px solid #999;
-    background: linear-gradient(90deg, #333, #222);
+    background: linear-gradient(90deg, #333, #222, #222, #333);
     flex-shrink: 0;
     overflow: hidden;
     box-shadow: inset -2px 2px 4px #0007;
+    grid-template-rows: 17px 1fr 17px;
+    gap: -10px;
 }
 .scroll-bar.horizontal {
     height: 18px;
@@ -1075,36 +1116,150 @@ a:visited {
     border-right: none;
     border-bottom: 1px solid #999;
     margin-bottom: 1px;
-    background: linear-gradient(#333, #222);
+    background: linear-gradient(#333, #222, #222, #333);
+    grid-template-rows: unset;
+    grid-template-columns: 17px 1fr 17px;
+}
+.scroll-bar > button {
+    --background: linear-gradient(#aaa, #aaa);
+    border: 1px solid #666;
+    box-shadow: -2px 2px 4px #0007;
+    color: #000a;
+}
+.scroll-bar > button:active {
+    z-index: 0;
+    --background: linear-gradient(#999, #999);
+}
+.scroll-bar.disabled > button {
+    color: #0005;
+    pointer-events: none;
+}
+.scroll-bar > button::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: var(--background);
+    pointer-events: none;
+}
+.scroll-bar > button::after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #666;
+    border-radius: 10px;
+    pointer-events: none;
+}
+.scroll-bar.vertical > button.back {
+    grid-row: 1;
+    border-block: none;
+    background: conic-gradient(from 90deg, #0000 12.49%, currentColor 12.5% 37.5%, #0000 37.51%) 50% 25% / 50% 50% no-repeat, var(--background);
+}
+.scroll-bar.vertical > button.back::before {
+    top: 17px;
+    left: 0px;
+    border-inline: 1px solid #666;
+    clip-path: path("M 0 0 L 18 0 L 18 9 A 1 1 0 0 0 0 9 Z");
+}
+.scroll-bar.vertical > button.back::after {
+    top: 16px;
+    left: -1px;
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+}
+.scroll-bar.vertical > button.forw {
+    z-index: 1;
+    grid-row: 3;
+    border-block: none;
+    background: conic-gradient(from -90deg, #0000 12.49%, currentColor 12.5% 37.5%, #0000 37.51%) 50% 75% / 50% 50% no-repeat, var(--background);
+}
+.scroll-bar.vertical > button.forw::before {
+    bottom: 17px;
+    left: 0px;
+    border-inline: 1px solid #666;
+    clip-path: path("M 0 18 L 18 18 L 18 7 A 1 1 0 0 1 0 7 Z");
+}
+.scroll-bar.vertical > button.forw::after {
+    bottom: 16px;
+    left: -1px;
+    clip-path: polygon(0 100%, 100% 100%, 100% 50%, 0 50%);
+}
+.scroll-bar.vertical > div {
+    grid-row: 2;
+    position: relative;
+}
+.scroll-bar.horizontal > button.back {
+    z-index: 1;
+    grid-column: 1;
+    border-inline: none;
+    background: conic-gradient(from 0deg, #0000 12.49%, currentColor 12.5% 37.5%, #0000 37.51%) 25% 50% / 50% 50% no-repeat, var(--background);
+}
+.scroll-bar.horizontal > button.back::before {
+    top: 0px;
+    left: 17px;
+    border-block: 1px solid #666;
+    clip-path: path("M 0 0 L 0 18 L 8 18 A 1 1 0 0 1 8 0 Z");
+}
+.scroll-bar.horizontal > button.back::after {
+    top: -1px;
+    left: 16px;
+    clip-path: polygon(0 0, 0 100%, 50% 100%, 50% 0);
+}
+.scroll-bar.horizontal > button.forw {
+    grid-column: 3;
+    border-inline: none;
+    background: conic-gradient(from 180deg, #0000 12.49%, currentColor 12.5% 37.5%, #0000 37.51%) 75% 50% / 50% 50% no-repeat, var(--background);
+}
+.scroll-bar.horizontal > button.forw::before {
+    top: 0px;
+    right: 17px;
+    border-block: 1px solid #666;
+    clip-path: path("M 18 0 L 18 18 L 7 18 A 1 1 0 0 0 7 0 Z");
+}
+.scroll-bar.horizontal > button.forw::after {
+    top: -1px;
+    right: 16px;
+    clip-path: polygon(100% 0, 100% 100%, 50% 100%, 50% 0);
+}
+.scroll-bar.horizontal > div {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
 }
 .scroll-bar .thumb {
     --size: 1;
     --position: 0;
-    --height: calc(100% + 2px);
+    --height: calc(100%);
     position: absolute;
     top: calc(100% * var(--position) / var(--size));
-    margin-top: -1px;
+    margin-top: 0px;
     width: 100%;
     height: calc(var(--height) / var(--size));
-    border: 1px solid #666;
+    border: 1px solid #444;
+    border-radius: 9px;
     box-sizing: border-box;
-    background: linear-gradient(90deg, #888, #999 10%, #aaa 90%, #999);
-    box-shadow: -2px 2px 4px #0007;
+    background: linear-gradient(90deg,  #999, #ccc);
+    box-shadow: -2px 2px 4px #0007, inset 0 0 4px #000;
+    background-clip: padding-box;
     transform: translateY(0px);
 }
 .scroll-bar .thumb:active {
-    background: linear-gradient(90deg, #777, #888 10%, #999 90%, #888);
-    transform: translateY(1px);
+    background: linear-gradient(90deg, #777, #bbb);
+    background-clip: padding-box;
 }
 .scroll-bar.horizontal .thumb {
-    top: 1px;
     left: calc(100% * var(--position) / var(--size));
     width: calc(var(--height) / var(--size));
+    top: 0;
     height: 100%;
-    background: linear-gradient(#888, #999 15%, #aaa 85%, #999);
+    background: linear-gradient(0deg, #999, #ccc);
+    background-clip: padding-box;
 }
 .scroll-bar.horizontal .thumb:active {
-    background: linear-gradient(#777, #888 15%, #999 85%, #888);
+    background: linear-gradient(0deg, #777, #bbb);
+    background-clip: padding-box;
 }
 .scroll-bar.disabled .thumb {
     display: none;
@@ -1121,7 +1276,7 @@ a:visited {
     border-right: none;
     border-left: 1px solid #999;
     z-index: 10;
-    background: linear-gradient(90deg, #111, #000);
+    background: linear-gradient(90deg, #111, #000, #000, #111);
 }
 
 .body-scroll-bar.disabled {
@@ -1135,4 +1290,42 @@ a:visited {
     position: absolute;
     visibility: hidden;
     z-index: -100;
+}
+
+.reset-list {
+    margin-top: 16px;
+}
+.reset-list ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-block: 4px 16px;
+    padding: 0;
+}
+.reset-list li {
+    margin-left: 16px;
+    margin-top: 4px;
+}
+
+.changelog h2 {
+    font-family: "MS Serif", "Times New Roman", serif;
+    font-size: 24px;
+    font-style: normal;
+    line-height: 120%;
+    font-weight: normal;
+    margin: 0;
+}
+.changelog h2 b {
+    filter: url("#crispify");
+}
+.changelog h2 i {
+    filter: url("#crispify");
+    opacity: 0.5;
+}
+
+.changelog ul {
+    margin-block: 4px 8px;
+    padding-left: 20px;
+}
+.changelog li {
+    margin-bottom: 4px;
 }

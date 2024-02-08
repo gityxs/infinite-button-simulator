@@ -1,5 +1,6 @@
 tabs.tokens = {
     name: "Tokens",
+    tier: 1,
     condition: () => game.unlocks["tok1"],
 
     data: null,

@@ -111,6 +111,11 @@ overlays.save = {
                 importData = JSON.parse(decodeURIComponent(atob(saveText.value)));
                 importData = deepCopy(importData, getStartGame());
             } catch {
+                if (saveText.value.includes("...") || saveText.value.includes("…")) {
+                    showOverlay("popup", "Invalid Save", 
+                        "Ellipsis detected in save string. Your save might have been truncated by the browser or the operating system. " +
+                        ["Ok"]);
+                }
                 showOverlay("popup", "Invalid Save", 
                     "This save appears to be incorrect or corrupted. " +
                     "Make sure you have copied the entire save string and the save string is not truncated.", ["Ok"]);
@@ -118,7 +123,7 @@ overlays.save = {
             }
 
             let desc = document.createElement("div");
-            desc.textContent = "Do you want to import this save? This will override the current save!";
+            desc.textContent = "Do you want to import this save? This will overwrite the current save!";
 
             desc.append(document.createElement("br"));
             desc.append(document.createElement("br"));

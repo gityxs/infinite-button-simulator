@@ -102,7 +102,7 @@ let tokenUpgrades = {
 }
 
 function getTokenMulti() {
-    return D.add(temp.runeStats.token ?? 0, 1).mul(temp.tokenUpgEffects.tokens.gain);
+    return D.add(temp.runeStats.token ?? 0, 1).mul(temp.tokenUpgEffects.tokens.gain).mul(temp.colUpgEffects[13]);
 }
 
 function buyTokenUpgrade(cat, id) {

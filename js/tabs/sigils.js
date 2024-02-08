@@ -1,5 +1,6 @@
 tabs.sigils = {
     name: "Sigils",
+    tier: 1,
     condition: () => game.unlocks["sig1"],
 
     data: null,
@@ -94,7 +95,8 @@ tabs.sigils = {
 
         for (let b = 0; b < game.sigils.length; b++) {
             let ctn = this.data.details.items[b];
-            let tier = game.ladder[b].tier;
+            let tier = game.ladder[b]?.tier;
+            if (tier === undefined) continue;
             let name = D.lt(tier, tierNames.length) ? tierNames[D(tier).toNumber()] : "p";
             ctn.textContent = "×" + format(temp.sigilEffects[b], 2) + " all " + name + " gains";
         }

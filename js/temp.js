@@ -20,6 +20,9 @@ let temp = {
     sigilEffects: {},
 
     skillLevel: D(0),
+
+    colPointGain: D(0),
+    colUpgEffects: {},
 }
 
 function updateTemp() {
@@ -30,7 +33,8 @@ function updateTemp() {
 
     temp.gemSpeed = D.add(game.gemUpgs, 1).mul(D.add(temp.runeStats.gem ?? 0, 1))
     .mul(D.pow(game.gemGens, temp.tokenUpgEffects.rune.genEff))
-      .mul(D.pow(temp.tokenUpgEffects.double.gems, temp.tokenUpgEffects.rune.upgEff));
+      .mul(D.pow(temp.tokenUpgEffects.double.gems, temp.tokenUpgEffects.rune.upgEff))
+      .mul(temp.colUpgEffects[12]);
 
     temp.skillLevel = game.ladder.reduce((a, b) => D.add(a, b.level), 0);
 }
@@ -108,4 +112,13 @@ function updateSigilEffects() {
         temp.sigilEffects[a] = multi = D.mul(game.sigils[a], 0.05).mul(a + 1).add(1).mul(multi);
         temp.sigilPoints = D.pow(2, a).mul(game.sigils[a]).add(temp.sigilPoints);
     }
+}
+
+function updateCollapseStats() {
+    temp.colUpgEffects = {};
+    for (let id in collapseUpgrades) {
+        let level = game.colUpg[id] ?? 0;
+        temp.colUpgEffects[id] = collapseUpgrades[id].effectAmount?.(level);
+    }
+    temp.colPointGain = D(game.collapsium ?? 0).mul(temp.colUpgEffects[14])
 }
