@@ -151,6 +151,7 @@ function createHorizontalScrollbar(element) {
     thumbZone.append(thumb);
 
     function update() {
+        element.style.justifyContent = element.scrollWidth <= element.clientWidth ? "" : "start";
         bar.classList.toggle("disabled", element.scrollWidth <= element.clientWidth);
         thumb.style.setProperty("--size", element.scrollWidth / element.clientWidth);
         thumb.style.setProperty("--position", element.scrollLeft / element.clientWidth);

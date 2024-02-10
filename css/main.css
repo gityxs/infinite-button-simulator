@@ -335,6 +335,7 @@ a:visited {
     overflow: hidden;
     position: relative;
     cursor: grab;
+    touch-action: none;
 }
 .charger:active {
     cursor: grabbing;
