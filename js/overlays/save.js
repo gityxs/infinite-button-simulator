@@ -42,10 +42,29 @@ overlays.save = {
         importFromClipBtn.classList.add("pushy-button", "mini");
         importFromClipBtn.innerText = "Import from Clipboard";
         importFromClipBtn.onclick = () => {
-            showOverlay("popup", "Import from Clipboard", 
-                "Please paste the save on your clipboard to the big text box above the button. " + 
-                "(click on the text box then press Ctrl and V at the same time on your keyboard or right click / long press on mobile and select the \"Paste\" option)",
-                ["Ok"]);
+            function showError() {
+                let err = document.createElement("div");
+                err.append(
+                    "Your browser does not allow pasting from the clipboard through this button.",
+                    document.createElement("br"), document.createElement("br"),
+                    "Please manually paste the save on your clipboard to the big text box above the button.",
+                    document.createElement("br"),
+                    "(click once on the text box then press Ctrl+V on your keyboard or right click / long press on mobile and select the \"Paste\" option)",
+                );
+                showOverlay("popup", "Import from Clipboard", 
+                    err,
+                    ["Ok"]);
+            }
+            try {
+                navigator.clipboard.readText().then(x => {
+                    saveText.value = x;
+                    saveText.oninput();
+                }).catch(x => {
+                    showError();
+                })
+            } catch {
+                showError();
+            }
         }
         importActions.append(importFromClipBtn);
 
@@ -77,6 +96,7 @@ overlays.save = {
         exportToClipBtn.classList.add("pushy-button", "mini");
         exportToClipBtn.textContent = "Export to Clipboard";
         exportToClipBtn.onclick = () => {
+            
             navigator.clipboard.writeText(saveText.value).then(() => {
                 showOverlay("popup", "Game Exported", "Save exported to clipboard!", ["Ok"]);
             }).catch(() => {
