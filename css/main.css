@@ -1110,6 +1110,7 @@ a:visited {
     box-shadow: inset -2px 2px 4px #0007;
     grid-template-rows: 17px 1fr 17px;
     gap: -10px;
+    touch-action: none;
 }
 .scroll-bar.horizontal {
     height: 18px;

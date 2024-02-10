@@ -28,6 +28,7 @@ function getStartGame() {
         sigils: [],
 
         collapsium: D(0),
+        colTimer: 0,
         colPoints: D(0),
         colUpg: {},
 
