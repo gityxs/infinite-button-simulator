@@ -112,7 +112,7 @@ var cnItems = {
     "Pixelated Text": "像素化文本",
     "Reinhardt's True Infinity": "莱因哈特的真实无限",
     "Save Game": "保存游戏",
-    "Show Changelog": "显示变更日志",
+    "Show Changelog": "显示更新日志",
     "Skill level:": "技能等级：",
     "Start all over from the beginning.": "一切从头开始。",
     "Storage": "存储",
