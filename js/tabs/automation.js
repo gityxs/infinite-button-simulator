@@ -137,13 +137,13 @@ tabs.automation = {
     },
     updateCharger(charger) {
         if (chargeNotes[0] > 0) {
-            charger.style.setProperty("--note", '"Drag this panel" "\\A" "forward or backward" "\\A" "to find charges."');
+            charger.style.setProperty("--note", '"拖动此面板" "\\A" "向前或向后" "\\A" "去寻找充能."');
             charger.style.setProperty("--note-alpha", chargeNotes[0]);
         } else if (chargeNotes[1] > 0) {
-            charger.style.setProperty("--note", '"Please drag in" "\\A" "one direction only."');
+            charger.style.setProperty("--note", '"请拖动" "\\A" "仅一个方向."');
             charger.style.setProperty("--note-alpha", chargeNotes[1]);
         } else if (chargeNotes[2] > 0) {
-            charger.style.setProperty("--note", '"Max height reached." "\\A" "Please colllect excessive" "\\A" "charge in the charger."');
+            charger.style.setProperty("--note", '"达到最大高度." "\\A" "请收集多余的" "\\A" "充能在充电器中."');
             charger.style.setProperty("--note-alpha", chargeNotes[2]);
         } else {
             charger.style.setProperty("--note", null);
